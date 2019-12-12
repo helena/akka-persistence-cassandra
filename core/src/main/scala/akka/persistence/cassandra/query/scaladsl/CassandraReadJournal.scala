@@ -437,12 +437,7 @@ class CassandraReadJournal(system: ExtendedActorSystem, cfg: Config, cfgPath: St
       .mapConcat(r => toEventEnvelope(r.persistentRepr, TimeBasedUUID(r.offset)))
       .named("eventsByTag-" + URLEncoder.encode(tag, ByteString.UTF_8))
 
-  /**
-   * INTERNAL API
-   */
-  @InternalApi private[akka] def currentEventsByTagInternal(
-      tag: String,
-      offset: Offset): Source[UUIDPersistentRepr, NotUsed] =
+  private[akka] def currentEventsByTagInternal(tag: String, offset: Offset): Source[UUIDPersistentRepr, NotUsed] =
     if (!config.eventsByTagEnabled)
       Source.failed(new IllegalStateException("Events by tag queries are disabled"))
     else {

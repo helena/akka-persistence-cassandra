@@ -16,10 +16,7 @@ class CassandraReadJournalProvider(system: ExtendedActorSystem, config: Config, 
     try {
       new scaladsl.CassandraReadJournal(system, config, configPath)
     } catch {
-      case NonFatal(e) =>
-        // TODO can be removed when https://github.com/akka/akka/issues/18976 is fixed
-        system.log.error(e, "Failed to initialize CassandraReadJournal")
-        throw e
+      case NonFatal(e) => throw e
     }
 
   override val javadslReadJournal: javadsl.CassandraReadJournal =

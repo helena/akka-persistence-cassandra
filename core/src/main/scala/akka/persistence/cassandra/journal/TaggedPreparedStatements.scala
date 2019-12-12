@@ -4,12 +4,14 @@
 
 package akka.persistence.cassandra.journal
 
+import scala.concurrent.{ ExecutionContext, Future }
+
+import akka.annotation.InternalApi
 import akka.cassandra.session.scaladsl.CassandraSession
 import com.datastax.driver.core.PreparedStatement
 
-import scala.concurrent.{ ExecutionContext, Future }
-
-trait TaggedPreparedStatements extends CassandraStatements {
+/** INTERNAL API */
+@InternalApi private[akka] trait TaggedPreparedStatements extends CassandraStatements {
   private[akka] val session: CassandraSession
   private[akka] implicit val ec: ExecutionContext
 

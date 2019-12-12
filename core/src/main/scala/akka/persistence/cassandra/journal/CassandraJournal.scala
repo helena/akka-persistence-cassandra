@@ -9,15 +9,18 @@ import java.nio.ByteBuffer
 import java.util.{ UUID, HashMap => JHMap, Map => JMap }
 
 import akka.Done
+import akka.actor.{
+  ActorRef,
+  ActorSystem,
+  CoordinatedShutdown,
+  ExtendedActorSystem,
+  NoSerializationVerificationNeeded,
+  OneForOneStrategy,
+  SupervisorStrategy
+}
 import akka.actor.SupervisorStrategy.Stop
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
-import akka.actor.CoordinatedShutdown
-import akka.actor.ExtendedActorSystem
-import akka.actor.NoSerializationVerificationNeeded
-import akka.actor.OneForOneStrategy
-import akka.actor.SupervisorStrategy
-import akka.annotation.{ DoNotInherit, InternalApi }
+import akka.annotation.InternalApi
+import akka.cassandra.session._
 import akka.cassandra.session.scaladsl.CassandraSession
 import akka.event.{ Logging, LoggingAdapter }
 import akka.persistence._
@@ -38,7 +41,6 @@ import com.datastax.driver.core.policies.RetryPolicy.RetryDecision
 import com.datastax.driver.core.policies.{ LoggingRetryPolicy, RetryPolicy }
 import com.datastax.driver.core.utils.{ Bytes, UUIDs }
 import com.typesafe.config.Config
-import akka.cassandra.session._
 
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
@@ -49,11 +51,11 @@ import scala.util.control.NonFatal
 import scala.util.{ Failure, Success, Try }
 
 /**
+ * INTERNAL API
  * Journal implementation of the cassandra plugin.
  * Inheritance is possible but without any guarantees for future source compatibility.
  */
-@DoNotInherit
-class CassandraJournal(cfg: Config, cfgPath: String)
+@InternalApi private[akka] class CassandraJournal(cfg: Config, cfgPath: String)
     extends AsyncWriteJournal
     with CassandraRecovery
     with CassandraStatements

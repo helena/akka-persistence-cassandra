@@ -19,7 +19,8 @@ import akka.stream.scaladsl.{ Sink, Source }
 import akka.util.OptionVal
 import akka.cassandra.session._
 
-trait CassandraRecovery extends CassandraTagRecovery with TaggedPreparedStatements {
+/** INTERNAL API */
+@InternalApi private[akka] trait CassandraRecovery extends CassandraTagRecovery with TaggedPreparedStatements {
   this: CassandraJournal =>
 
   private[akka] val config: CassandraJournalConfig
